@@ -1,0 +1,31 @@
+FROM python:3.11-slim
+
+WORKDIR /app
+
+# Install system dependencies and Chromium
+RUN apt-get update && apt-get install -y \
+    chromium \
+    chromium-driver \
+    && rm -rf /var/lib/apt/lists/*
+
+# Set environment variables for Chrome/Chromium
+ENV CHROME_DRIVER_PATH=/usr/bin/chromedriver
+ENV CHROMIUM_PATH=/usr/bin/chromium
+
+# Copy requirements file
+COPY requirements.txt .
+
+# Install Python dependencies
+RUN pip install --no-cache-dir -r requirements.txt
+
+# Copy application code
+COPY src/ ./src/
+
+# Create data directory
+RUN mkdir -p /app/data/logs
+
+# Set permissions
+RUN chmod -R 777 /app/data
+
+# Run the application
+CMD ["python", "-m", "flask", "--app", "src/app.py", "run", "--host=0.0.0.0", "--port=5002", "--debug"] 

@@ -1,0 +1,6 @@
+-r requirements.txt
+pytest==8.0.0
+pytest-cov==4.1.0
+coverage==7.4.3
+watchdog==4.0.0
+webdriver-manager==4.0.1 

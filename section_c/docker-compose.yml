@@ -1,0 +1,20 @@
+version: '3.8'
+
+services:
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    ports:
+      - "5002:5000"
+    volumes:
+      - .:/app
+      - /app/data
+    environment:
+      - FLASK_APP=src.app:create_app
+      - FLASK_ENV=development
+      - FLASK_DEBUG=1
+      - MOZ_HEADLESS=1
+      - GECKO_DRIVER_PATH=/usr/local/bin/geckodriver
+      - PYTHONUNBUFFERED=1
+    command: python -m flask run --host=0.0.0.0 

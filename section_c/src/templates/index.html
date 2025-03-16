@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BTC-EUR Price Scraper</title>
+    <link rel="icon" type="image/jpg" href="{{ url_for('static', filename='images/oddsscanner-favicon.jpg') }}">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+</head>
+<body>
+    <!-- Navigation Header -->
+    <header class="nav-header">
+        <div class="nav-container">
+            <a href="/" class="nav-logo">
+                <img src="{{ url_for('static', filename='images/oddsscanner-logo.png') }}" alt="Odds Scanner Logo">
+            </a>
+            <ul class="nav-menu">
+                <li class="menu-item">
+                    <a href="#">
+                        Sports
+                        <svg class="chevron-down" viewBox="0 0 24 24">
+                            <path d="M7 10l5 5 5-5z"/>
+                        </svg>
+                    </a>
+                    <div class="dropdown">
+                        <div class="dropdown-content">
+                            <a href="#" class="dropdown-item">Football</a>
+                            <a href="#" class="dropdown-item">Basketball</a>
+                            <a href="#" class="dropdown-item">Tennis</a>
+                            <a href="#" class="dropdown-item">American Football</a>
+                            <a href="#" class="dropdown-item">Baseball</a>
+                            <a href="#" class="dropdown-item">Ice Hockey</a>
+                            <a href="#" class="dropdown-item">Cricket</a>
+                            <a href="#" class="dropdown-item">Boxing</a>
+                            <a href="#" class="dropdown-item">MMA</a>
+                            <a href="#" class="dropdown-item">eSports</a>
+                        </div>
+                    </div>
+                </li>
+                <li class="menu-item">
+                    <a href="#">
+                        Tools
+                        <svg class="chevron-down" viewBox="0 0 24 24">
+                            <path d="M7 10l5 5 5-5z"/>
+                        </svg>
+                    </a>
+                    <div class="dropdown">
+                        <div class="dropdown-content">
+                            <a href="#" class="dropdown-item">Value Bets</a>
+                            <a href="#" class="dropdown-item">Dropping Odds</a>
+                            <a href="#" class="dropdown-item">Sure Bets</a>
+                            <a href="#" class="dropdown-item">Bet Tracker</a>
+                            <a href="#" class="dropdown-item">PRO Statistics</a>
+                        </div>
+                    </div>
+                </li>
+                <li class="menu-item">
+                    <a href="#">
+                        Calculators
+                        <svg class="chevron-down" viewBox="0 0 24 24">
+                            <path d="M7 10l5 5 5-5z"/>
+                        </svg>
+                    </a>
+                    <div class="dropdown">
+                        <div class="dropdown-content">
+                            <a href="#" class="dropdown-item">+EV</a>
+                            <a href="#" class="dropdown-item">Multiple</a>
+                            <a href="#" class="dropdown-item">Surebets</a>
+                            <a href="#" class="dropdown-item">Fairline</a>
+                            <a href="#" class="dropdown-item">Hedging</a>
+                            <a href="#" class="dropdown-item">Odds</a>
+                        </div>
+                    </div>
+                </li>
+                <li class="menu-item">
+                    <a href="#">
+                        Betting
+                        <svg class="chevron-down" viewBox="0 0 24 24">
+                            <path d="M7 10l5 5 5-5z"/>
+                        </svg>
+                    </a>
+                    <div class="dropdown">
+                        <div class="dropdown-content">
+                            <a href="#" class="dropdown-item">Betting Sites</a>
+                            <a href="#" class="dropdown-item">Sports Betting</a>
+                            <a href="#" class="dropdown-item">Best Bonuses</a>
+                            <a href="#" class="dropdown-item">Best Apps</a>
+                        </div>
+                    </div>
+                </li>
+                <li><a href="#">Academy</a></li>
+            </ul>
+            <div class="nav-right">
+                <button class="nav-button secondary">Sign In</button>
+                <button class="nav-button primary">Register</button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <div class="container">
+        <!-- Header Section -->
+        <header class="header-section">
+            <h1>BTC-EUR Price Scraper</h1>
+            <p class="subtitle">Bitcoin price data collection tool</p>
+            <p class="subtitle">This website scrapes the historical data from a specifc date using Yahoo Finance</p>
+        </header>
+
+        <!-- Data Collection Card -->
+        <div class="card">
+            <h2>Data Collection</h2>
+            <div id="scraper-status">Select a day and fetch BTC historical data from the past 10 days</div>
+            
+            <div class="scraper-controls">
+                <div class="date-picker-container">
+                    <div class="date-input">
+                        <label for="selected-date">Select a date:</label>
+                        <input type="text" id="selected-date" class="date-picker" placeholder="Select date">
+                    </div>
+                </div>
+
+                <div class="button-container">
+                    <button id="quick-scrape-btn" onclick="startQuickScraping()" class="secondary-btn">Quick Scrape</button>
+                    <button id="download-btn" onclick="downloadCSV()" class="download-btn" disabled>Download CSV</button>
+                </div>
+            </div>
+
+            <div class="loading-container" style="display: none;">
+                <div class="spinner"></div>
+                <div class="progress-bar">
+                    <div class="progress-fill"></div>
+                    <div class="progress-text">0%</div>
+                </div>
+            </div>
+
+            <div id="error-message" class="error" style="display: none;"></div>
+            <div id="success-message" class="success" style="display: none;"></div>
+
+            <div id="preview-container" style="display: none;">
+                <h3>Data Preview</h3>
+                <table id="data-preview">
+                    <thead>
+                        <tr>
+                            <th>Date</th>
+                            <th>BTC Closing Value (€)</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Calculate min date (355 days ago)
+        const today = new Date();
+        const minDate = new Date();
+        minDate.setDate(today.getDate() - 355);
+
+        // Initialize date picker
+        flatpickr("#selected-date", {
+            dateFormat: "Y-m-d",
+            maxDate: "today",
+            minDate: minDate,
+            defaultDate: "today"
+        });
+
+        function showLoading(show) {
+            document.querySelector('.loading-container').style.display = show ? 'block' : 'none';
+            document.getElementById('quick-scrape-btn').disabled = show;
+        }
+
+        function updateProgress(percent) {
+            document.querySelector('.progress-fill').style.width = `${percent}%`;
+            document.querySelector('.progress-text').textContent = `${percent}%`;
+        }
+
+        function showMessage(type, message) {
+            document.getElementById('error-message').style.display = 'none';
+            document.getElementById('success-message').style.display = 'none';
+            document.getElementById(`${type}-message`).textContent = message;
+            document.getElementById(`${type}-message`).style.display = 'block';
+        }
+
+        function startQuickScraping() {
+            showLoading(true);
+            updateProgress(0);
+            document.getElementById('preview-container').style.display = 'none';
+            
+            let progress = 0;
+            const progressInterval = setInterval(() => {
+                progress += 5;
+                if (progress <= 90) {
+                    updateProgress(progress);
+                }
+            }, 100);
+
+            const selectedDate = document.getElementById('selected-date').value;
+
+            fetch('/api/quick-scrape', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    start_date: selectedDate
+                })
+            })
+                .then(response => response.json())
+                .then(data => {
+                    clearInterval(progressInterval);
+                    updateProgress(100);
+                    
+                    if (data.success) {
+                        showMessage('success', 'Successfully retrieved data!');
+                        document.getElementById('download-btn').disabled = false;
+                        
+                        const tbody = document.querySelector('#data-preview tbody');
+                        tbody.innerHTML = '';
+                        if (data.data && data.data.rows) {
+                            tbody.innerHTML = data.data.rows.map(row => `
+                                <tr>
+                                    <td>${row.Date}</td>
+                                    <td>€ ${row["BTC Closing Value"]}</td>
+                                </tr>
+                            `).join('');
+                        }
+                        document.getElementById('preview-container').style.display = 'block';
+                    } else {
+                        showMessage('error', `Failed to retrieve data: ${data.error}`);
+                    }
+                })
+                .catch(error => {
+                    clearInterval(progressInterval);
+                    updateProgress(100);
+                    showMessage('error', 'Failed to retrieve data: ' + error.message);
+                })
+                .finally(() => {
+                    setTimeout(() => {
+                        showLoading(false);
+                    }, 500);
+                });
+        }
+
+        function downloadCSV() {
+            window.location.href = '/api/download';
+        }
+    </script>
+</body>
+</html> 
