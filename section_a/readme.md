@@ -28,6 +28,13 @@ The database is configured with the following credentials:
 
 The database will be initialized with the schema and data from `sql_db.sql`.
 
+Inside this folder run oddsscanner_test_health.sh script to execute the queries that the test requires. After executing queris this script will print the results to the console and generate a file called query_results.sql with the results.
+
+
+```bash
+./oddsscanner_test_health.sh
+```
+
 ## Connecting to the Database
 
 You can connect to the database using any MySQL client with these credentials:
