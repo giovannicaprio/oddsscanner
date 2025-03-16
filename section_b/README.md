@@ -20,12 +20,7 @@ A PHP-based web application that fetches, stores, and displays currency exchange
 
 ## Installation
 
-1. Clone the repository:
-```bash
-git clone <repository-url>
-cd <project-directory>
-```
-
+1. Clone this repository:
 2. Build and start the Docker containers:
 ```bash
 docker-compose up -d --build
