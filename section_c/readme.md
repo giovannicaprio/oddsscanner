@@ -25,10 +25,6 @@ A web application that scrapes Bitcoin to Euro (BTC-EUR) price data from Yahoo F
 ### Using Docker (Recommended)
 
 1. Clone the repository:
-```bash
-git clone <repository-url>
-cd <project-directory>
-```
 
 2. Create a `.env` file in the project root:
 ```bash
